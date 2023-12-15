@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- ... other meta tags ... -->
+    <title>Smart Grid Pricing Strategy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1, h3 { text-align: center; }
+        .graph-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .graph {
+            background-color: #fff;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #lastUpdated {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        #dateBox {
+        border: 2px solid #28a745; /* Green border */
+        background-color: #e9f8ed; /* Light green background */
+        color: #155724; /* Dark green text color for readability */
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 15px;
+        display: inline-block;
+        max-width: 80%;
+        box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2); /* Soft green shadow for depth */
+        text-align: center;
+        }
+
+
+        #priceOutput {
+        border: 2px solid #007bff; /* Blue border */
+        background-color: #e7f1ff; /* Light blue background */
+        color: #333; /* Dark text color for readability */
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 15px;
+        display: inline-block;
+        max-width: 80%;
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Soft shadow for depth */
+        text-align: center; /* Center the text */
+        }
+    </style>
+
+    <!-- Include D3.js library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Include your JavaScript file -->
+    <script src="script_time.js" defer></script>
+</head>
+<body>
+    <h1>Smart Grid Pricing Strategy</h1>
+    <h3>Group Members: Wenbo Liu, Jiuke Huang, Jiaxun Han</h3>
+     <!-- uodated box -->
+     <div id="dateBox">
+        Last Updated: <span id="UpdatedDate"></span>
+    </div>
+    
+    <h2>Predicted Tomorrow's Electricity Price: <span id="predictedPrice">Loading...</span> </h2> 
+
+    <h2>Select a Date to View Electricity Prices</h2>
+    <p>Please select a date using the calendar below to see the electricity price for that specific day.</p>
+    <label for="datePicker">Select Date:</label>
+    <input type="date" id="datePicker">
+    <button id="viewButton">View</button>
+    <h2>Electricity Price for Selected Date:</h2>
+    <div id="priceOutput">Price will be displayed here. 343.12 USD per MWH</div>
+
+    <h2>Input Data</h2>
+    <div id="fuelMixGraph"></div>
+
+    <div id="priceGraph"></div>
+    <div id="weatherGraph"></div>
+    <div id="loadGraph"></div>
+    <h2>Model Prediction</h2>
+    <div id="predictionGraph"></div>
+    
+    <div id="tooltip" style="position: absolute; opacity: 0;"></div>
+
+
+</body>
+</html>
