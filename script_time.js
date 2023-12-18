@@ -6,7 +6,7 @@
     
         // Set the time to yesterday at 11:00 PM
         currentDate.setDate(currentDate.getDate() - 1); // Move to yesterday
-        currentDate.setHours(12, 0, 0, 0); // Set time to 11:00 PM
+        currentDate.setHours(23, 0, 0, 0); // Set time to 11:00 PM
     
         // Update the "lastUpdated" element
         const lastUpdated = document.getElementById('UpdatedDate');
@@ -30,6 +30,7 @@
     
         d3.csv(csvFilePath).then(function (data) {
             const parseDate = d3.timeParse("%Y-%m-%d");
+            
             data.forEach(function (d) {
                 d.Date = parseDate(d.Date);
                 d.total = +d["total"]; 
@@ -61,8 +62,22 @@
                 d.ura_price = +d["ura_price"]; 
                 d.dprice = +d["LMP"]; 
             });
+            const formatDate = d3.timeFormat("%Y-%m-%d");
+            document.getElementById('datePicker').addEventListener('change', function() {
+                var selectedDate = this.value;
+                var matchedData = data.find(d => formatDate(d.Date) === selectedDate);
+                // var lmpFormatted = parseFloat(matchedData.LMP).toFixed(2);
+                // console.log(matchedData)
+                if (matchedData) {
+                    var lmpFormatted = parseFloat(matchedData.LMP).toFixed(2); // Format to 2 decimal places
+                    document.getElementById('lmpValue').textContent = lmpFormatted + " USD";
+                } else {
+                    document.getElementById('lmpValue').textContent = "No data for selected date";
+                }
+                
+            });
         
-            const margin = { top: 20, right: 20, bottom: 60, left: 50 };
+            const margin = { top: 20, right: 20, bottom: 60, left: 75 };
             const width = 1500 - margin.left - margin.right;
             const height = 500 - margin.top - margin.bottom;
     
@@ -187,12 +202,13 @@
             svgLoad.append("g")
                 .call(d3.axisLeft(yScaleLoad))
                 .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -margin.left)
-                .attr("x", -height / 2)
-                .attr("dy", "0.71em")
+                .attr("x", 0) // Position at the beginning of the axis
+                .attr("y", -10) // Adjust vertical position above the axis
+                .attr("dy", "0.32em")
                 .attr("fill", "#000")
-                .text("Load");
+                .style("font-size", "16px") // Increased font size
+                .style("text-anchor", "start") // Align text to the start of the axis
+                .text("Load (kWh)");
             // Add line and legend for loadGraph
             svgLoad.append("path")
                 .data([data])
@@ -227,12 +243,13 @@
             svgWeather.append("g")
                 .call(d3.axisLeft(yScaleWeather))
                 .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -margin.left)
-                .attr("x", -height / 2)
-                .attr("dy", "0.71em")
+                .attr("x", 0) // Position at the beginning of the axis
+                .attr("y", -10) // Adjust vertical position above the axis
+                .attr("dy", "0.32em")
                 .attr("fill", "#000")
-                .text("Temperature");
+                .style("font-size", "14px") // Increased font size
+                .style("text-anchor", "start") // Align text to the start of the axis
+                .text("Temperature (F)");
             // Add lines and legend for weatherGraph
             svgWeather.append("path")
                 .data([data])
@@ -293,12 +310,13 @@
             svgFuelMix.append("g")
                 .call(d3.axisLeft(yScaleFuelMix))
                 .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -margin.left)
-                .attr("x", -height / 2)
-                .attr("dy", "0.71em")
+                .attr("x", 0) // Position at the beginning of the axis
+                .attr("y", -10) // Adjust vertical position above the axis
+                .attr("dy", "0.32em")
                 .attr("fill", "#000")
-                .text("MegaWattHours (MWh)");
+                .style("font-size", "14px") // Increased font size
+                .style("text-anchor", "start") // Align text to the start of the axis
+                .text("Percentage (%)");
             // Add lines and legend for fuelMixGraph
             svgFuelMix.append("path")
                 .data([data])
@@ -396,7 +414,7 @@
                 .attr("y", 0 - (margin.top / 4))
                 .attr("text-anchor", "middle")
                 .style("font-size", "16px")
-                .text("Fuel Mix Over Time");
+                .text("Generation Ratio Over Time");
     
             // Add axes for priceGraph
             svgPrice.append("g")
@@ -411,12 +429,14 @@
             svgPrice.append("g")
                 .call(d3.axisLeft(yScalePrice))
                 .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -margin.left)
-                .attr("x", -height / 2)
-                .attr("dy", "0.71em")
+                .attr("x", 0) // Position at the beginning of the axis
+                .attr("y", -10) // Adjust vertical position above the axis
+                .attr("dy", "0.32em")
                 .attr("fill", "#000")
-                .text("MegaWattHours (MWh)");
+                .style("font-size", "16px") // Increased font size
+                .style("text-anchor", "start") // Align text to the start of the axis
+                .text("Price");
+
             // Add lines and legend for PriceGraph
             svgPrice.append("path")
                 .data([data])
@@ -507,7 +527,10 @@
             // Add axes for predictionGraph
             svgPrediction.append("g")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(xScalePrediction))
+                .call(d3.axisBottom(xScalePrediction)
+                .tickFormat(d3.timeFormat("%Y-%m-%d")) // Format the date as "Year-Month-Day"
+                .ticks(d3.timeDay.every(16)) // Adjust tick interval to every day               
+                )
                 .append("text")
                 .attr("x", width / 2)
                 .attr("y", margin.bottom - 10)
@@ -517,12 +540,13 @@
             svgPrediction.append("g")
                 .call(d3.axisLeft(yScalePrediction))
                 .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -margin.left)
-                .attr("x", -height / 2)
-                .attr("dy", "0.71em")
+                .attr("x", 0) // Position at the beginning of the axis
+                .attr("y", -10) // Adjust vertical position above the axis
+                .attr("dy", "0.32em")
                 .attr("fill", "#000")
-                .text("Price");
+                .style("font-size", "14px") // Increased font size
+                .style("text-anchor", "start") // Align text to the start of the axis
+                .text("Price ($/MWh)");  
             // Add lines and legend for predictionGraph
             svgPrediction.append("path")
                 .data([data])
