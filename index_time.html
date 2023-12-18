@@ -4,16 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <!-- ... other meta tags ... -->
-    <title>Smart Grid Pricing Strategy</title>
+    <title>Electricity Price Forecasting</title>
     <style>
+
+
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #e0f7fa;
+            color: #263238;
         }
-
+        a, .button {
+        color: #ff9800; /* Bright orange for links and buttons */
+         }
         h1, h3 { text-align: center; }
         .graph-container {
             display: flex;
@@ -48,7 +53,7 @@
         }
 
 
-        #priceOutput {
+        #lmpDisplay {
         border: 2px solid #007bff; /* Blue border */
         background-color: #e7f1ff; /* Light blue background */
         color: #333; /* Dark text color for readability */
@@ -65,10 +70,10 @@
     <!-- Include D3.js library -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- Include your JavaScript file -->
-    <script src="script_time.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <h1>Smart Grid Pricing Strategy</h1>
+    <h1>Electricity Price Forecasting</h1>
     <h3>Group Members: Wenbo Liu, Jiuke Huang, Jiaxun Han</h3>
      <!-- uodated box -->
      <div id="dateBox">
@@ -83,7 +88,9 @@
     <input type="date" id="datePicker">
     <button id="viewButton">View</button>
     <h2>Electricity Price for Selected Date:</h2>
-    <div id="priceOutput">Price will be displayed here. 343.12 USD per MWH</div>
+    <!-- <div id="priceOutput">Price will be displayed here. 34.31 USD per MWH</div> -->
+    <div id="lmpDisplay">LMP: <span id="lmpValue">N/A</span></div>
+
 
     <h2>Input Data</h2>
     <div id="fuelMixGraph"></div>
